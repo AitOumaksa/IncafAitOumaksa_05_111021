@@ -2,7 +2,7 @@
 // Récupération du pannier
 let cart = getCart();
 
-
+console.log(cart)
 // affichage du panier sur la page HTML
 for (let jsonCartCanape of cart) {
 
@@ -12,7 +12,7 @@ for (let jsonCartCanape of cart) {
     </div>
     <div class="cart__item__content">
       <div class="cart__item__content__titlePrice">
-        <h2>${jsonCartCanape.name}</h2>
+        <h2>${jsonCartCanape.name}(${jsonCartCanape.color})</h2>
         <p>${jsonCartCanape.price} €</p>
       </div>
       <div class="cart__item__content__settings">
@@ -39,6 +39,8 @@ document.querySelectorAll('.itemQuantity').forEach(element => {
     updateCartCanapeQuantity(cart, this.closest(".cart__item").dataset.id, this.closest(".cart__item").dataset.color, this.value);
     updateQuantityPriceHtml(calculTotalQuantity(cart), calculTotalPrice(cart));
   });
+  //console.log(updateCartCanapeQuantity)
+ 
 
 });
 
@@ -58,7 +60,7 @@ document.querySelectorAll('.deleteItem').forEach(element => {
 //Validation de formulaire
 
 let form = document.querySelector('.cart__order__form');
-//fuction validation champ prénom 
+//écouter l'évenement de validation champ first name
 form.firstName.addEventListener('change', function () {
 
   validfirstName(this);
@@ -66,14 +68,14 @@ form.firstName.addEventListener('change', function () {
 
 
 
-//fuction validation champ nom 
+//écouter l'évenement de validation champ last name
 form.lastName.addEventListener('change', function () {
 
   validlastName(this);
 });
 
 
-//fuction validation champ address
+//écouter l'evenement de validation champ address
 form.address.addEventListener('change', function () {
 
   validaddress(this);
@@ -81,7 +83,7 @@ form.address.addEventListener('change', function () {
 
 
 
-// fuction validation champ city
+// écouter l'évenemn de validation champ city
 form.city.addEventListener('change', function () {
 
   validcity(this);
@@ -89,7 +91,7 @@ form.city.addEventListener('change', function () {
 
 
 
-// fuction validation champ email
+// ecouter l'évenement de validation champ email
 form.email.addEventListener('change', function (event) {
   event.stopPropagation();
   event.preventDefault();
@@ -97,12 +99,13 @@ form.email.addEventListener('change', function (event) {
 });
 
 
-// validation de la commande
 document.getElementById('order').addEventListener('click', function (event) {
   event.stopPropagation();
   event.preventDefault();
   contact = createContactObject(form);
   products = createArrayProductID(cart);
+  console.log(products)
+  // envoyer la requéte poste pour la validation de la commende et receoire le code de la confirmation
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: {
@@ -122,8 +125,10 @@ document.getElementById('order').addEventListener('click', function (event) {
       }
     })
     .then(function (jsonres) {
-      //console.log(jsonres);
+     //console.log(jsonres);
+      // supression d'article de localStorge apres la cofirmation de la commande 
       localStorage.removeItem('cart');
+      //recevoir le code confirmation localiser ou va s'afficher le code cofirm
       document.location.href=`./confirmation.html?orderId=${jsonres.orderId}`; 
     })
     .catch(function (err) {

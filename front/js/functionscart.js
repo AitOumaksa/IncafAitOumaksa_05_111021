@@ -1,7 +1,9 @@
+//afficher les resutat de MAJ dans le documant HTMl
 function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     document.getElementById('totalQuantity').innerHTML = totalQuantity;
     document.getElementById('totalPrice').innerHTML = totalPrice;
   }
+  //fuction validation champ last name 
   
   function validlastName(inputlastName) {
   
@@ -17,7 +19,7 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     }
   };
   
-  
+  //fuction validation champ first name
   function validfirstName(inputfirstName) {
   
     let firstName = new RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", 'g');
@@ -31,7 +33,7 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     }
   
   };
-  
+  // fuction validation champ adress 
   const validaddress = function (inputaddress) {
   
     let address = new RegExp("[A-Za-z0-9'\.\-\s\,]$", 'g');
@@ -46,7 +48,7 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     }
   
   };
-  
+  // fuction validation champ city
   function validcity(inputcity) {
   
     let city = new RegExp("^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$", 'g');
@@ -77,17 +79,17 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
   };
   
   */
-  
+  // api validation email
   function validEmail(inputEmailElement) {
   
-    if (!inputEmailElement.checkValidity()) {
+    if (!inputEmailElement.reportValidity()) {
       inputEmailElement.nextElementSibling.innerHTML = inputEmailElement.validationMessage;
     }
     else {
       inputEmailElement.nextElementSibling.innerHTML = '';
     }
   }
-  
+  //cree objet java script de formulaire pour envoyer au server 
   function createContactObject(form) {
     const contactObject = {
       firstName: form.firstName.value,
@@ -98,7 +100,9 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     }
     return contactObject;
   }
+ 
   
+  //cree objet java script des produit pour envoyer au server 
   function createArrayProductID(cart) {
     let ArrayProductID = [];
     for (let jsonCartCanape of cart) {
@@ -106,4 +110,3 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     }
     return ArrayProductID;
   }
-  

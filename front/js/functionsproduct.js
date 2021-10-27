@@ -11,4 +11,7 @@ function canapeToAddToCart() {
         color : document.getElementById('colors').value
     }
     return  canapeToAddToCartInfo;
+    
 }
+
+ 

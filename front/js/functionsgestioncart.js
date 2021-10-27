@@ -4,12 +4,23 @@ function AddToCart(canapeToAddToCartInfo) {
     let findCanape = checkCartIdColor(cart,canapeToAddToCartInfo.id,canapeToAddToCartInfo.color);
     if (findCanape == null) {
         cart.push(canapeToAddToCartInfo);
+        saveCart(cart); 
+        alert('Vous avez ajoutez ' +canapeToAddToCartInfo.quantity +' canapé  '+ canapeToAddToCartInfo.name +' '+canapeToAddToCartInfo.color+' '+'à votre panier' );
     }
     else {
+        if(parseInt(cart[findCanape].quantity) + parseInt(canapeToAddToCartInfo.quantity) <= 100){ 
         cart[findCanape].quantity = parseInt(cart[findCanape].quantity) + parseInt(canapeToAddToCartInfo.quantity);
+        saveCart(cart); 
+        alert('Vous avez ajoutez ' +canapeToAddToCartInfo.quantity +' canapé  '+ canapeToAddToCartInfo.name +' '+canapeToAddToCartInfo.color+' '+'à votre panier' );
+        }
+        else{
+            let canapCartMax = 100 - parseInt(cart[findCanape].quantity) ;
+            alert('Vous avez '+ cart[findCanape].quantity + ' canapé ' +canapeToAddToCartInfo.name + ' '+canapeToAddToCartInfo.color +' dans votre panier et vous pouvez en rajouter au maximum ' +canapCartMax);
+        }
     }
-    saveCart(cart); 
+  
 }
+ //console.log(saveCart)
 
 //récupère le contenu du panier nommé 'cart' qui est en format JSON et retourne son équivalent en objet javascript
 function getCart() {
@@ -40,6 +51,7 @@ function checkCartIdColor(cart,canapeId,canapeColor) {
     return find;
 }
 
+// Calculer le total de la quantité 
 function calculTotalQuantity(cart)
 { 
     let totalQuantity =0;
@@ -49,7 +61,7 @@ function calculTotalQuantity(cart)
 
     return totalQuantity;
 }
-
+// Calculer le total de prix
 function calculTotalPrice(cart)
 { 
     let totalPrice=0;
@@ -58,14 +70,14 @@ function calculTotalPrice(cart)
     }
     return totalPrice;
 }
-
+// MAJ de la Quantité
 function updateCartCanapeQuantity(cart,canapeId,canapeColor,quantity)
 {
     let findCanape = checkCartIdColor(cart,canapeId,canapeColor);
     cart[findCanape].quantity = parseInt(quantity); 
     saveCart(cart); 
 }
-
+// supression d'article de panier
 function deleteCartCanape(canapeId,canapeColor)
 {
     let findCanape = checkCartIdColor(cart,canapeId,canapeColor);

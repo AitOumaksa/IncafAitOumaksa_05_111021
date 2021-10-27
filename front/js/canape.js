@@ -1,11 +1,11 @@
-class Canape {
+/*class Canape {
     constructor(jsonCanape) {
         jsonCanape && Object.assign(this,jsonCanape);
     }
     
 }
 
-class CanapeCartInfo {
+/*class CanapeCartInfo {
     constructor(id,imageUrl,altTxt,name,price,quantity) {
         this.id=id;
         this.imageUrl=imageUrl;
@@ -15,4 +15,4 @@ class CanapeCartInfo {
         this.quantity=quantity;  
     }
     
-}
+}*/

@@ -1,95 +1,108 @@
-//afficher les resutat de MAJ dans le documant HTMl
+
+/**
+ * Afficher le nombreet le prix total des produits dans le panier sur le page cart.html
+ * @param {Integer} totalQuantity 
+ * @param {Float} totalPrice 
+ */
 function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     document.getElementById('totalQuantity').innerHTML = totalQuantity;
     document.getElementById('totalPrice').innerHTML = totalPrice;
   }
-  //fuction validation champ last name 
   
+  /**
+   * Validation champ last name et affichage d'un message d'erreur dans le prochaine élement HTMl
+   * @param {HTMLElement} inputlastName 
+   * @return {Boolean} retourne true quand c'est valider retourne false quand ce n'est pas valider
+   */
   function validlastName(inputlastName) {
-  
     let lastName = new RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", 'g');
-  
-    let p = inputlastName.nextElementSibling;
-  
+    let p = inputlastName.nextElementSibling;  
     if (lastName.test(inputlastName.value)) {
       p.innerHTML = ''
+      return true
     }
     else {
       p.innerHTML = 'Nom Non Valide'
+      return false
     }
   };
   
-  //fuction validation champ first name
+  /**
+   * Validation champ first name et affichage d'un message d'erreur dans le prochaine élement HTMl
+   * @param {HTMLElement} inputfirstName 
+   * @return {Boolean} retourne true quand c'est valider retourne false quand ce n'est pas valider 
+   */
   function validfirstName(inputfirstName) {
-  
     let firstName = new RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$", 'g');
-    let p = inputfirstName.nextElementSibling;
-  
+    let p = inputfirstName.nextElementSibling; 
     if (firstName.test(inputfirstName.value)) {
       p.innerHTML = ''
+      return true
     }
     else {
-      p.innerHTML = 'Prénom Non Valide'
+      p.innerHTML = 'Prénom Non Valide';
+      return false;
     }
-  
   };
-  // fuction validation champ adress 
+ 
+  /**
+   * Validation champ Adress et affichage d'un message d'erreur dans le prochaine élement HTMl
+   * @param {HTMLElement} inputaddress 
+   * @return {Boolean} retourne true quand c'est valider retourne false quand ce n'est pas valider 
+   */
   const validaddress = function (inputaddress) {
-  
-    let address = new RegExp("[A-Za-z0-9'\.\-\s\,]$", 'g');
-  
+    let address = new RegExp("[A-Za-z0-9'\.\-\s\,]$", 'g');  
     let p = inputaddress.nextElementSibling;
-  
     if (address.test(inputaddress.value)) {
-      p.innerHTML = ''
+      p.innerHTML = '';  
+      return true
     }
     else {
-      p.innerHTML = 'Address Non Valide'
-    }
-  
+      p.innerHTML = 'Address Non Valide';      
+      return false
+    }  
   };
-  // fuction validation champ city
+  
+  /**
+   * Validation champ city et affichage d'un message d'erreur dans le prochaine élement HTMl
+   * @param {HTMLElement} inputcity 
+   * @return {Boolean} retourne true quand c'est valider retourne false quand ce n'est pas valider 
+   */
   function validcity(inputcity) {
-  
-    let city = new RegExp("^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$", 'g');
-  
+    let city = new RegExp("^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$", 'g');  
     let p = inputcity.nextElementSibling;
-  
     if (city.test(inputcity.value)) {
-      p.innerHTML = ''
+      p.innerHTML = '';
+      return true
     }
     else {
-      p.innerHTML = 'Ville Non Valide'
+      p.innerHTML = 'Ville Non Valide';  
+      return false
     }
   };
   
-  /*const validEmail = function(inputemail) {
-  
-     let email = new RegExp("^[\w.+-]+@[a-zA-Z0-9-]+\.[\w-.]+$", 'g');
-  
-   let p = inputemail.nextElementSibling;
-  
-   if(email.test(inputemail.value)){
-    p.innerHTML = ''
-   }
-   else{
-     p.innerHTML ='Email Non Valide'
-   }
-    
-  };
-  
-  */
-  // api validation email
+  /**
+   * Validation de champ Email et affichage d'un message d'erreur dans le prochaine élement HTMl
+   * @param {HTMLElement} inputEmailElement 
+   * @return {Boolean} retourne true quand c'est valider retourne false quand ce n'est pas valider 
+   */
   function validEmail(inputEmailElement) {
   
-    if (!inputEmailElement.reportValidity()) {
-      inputEmailElement.nextElementSibling.innerHTML = inputEmailElement.validationMessage;
+    if (inputEmailElement.reportValidity()) {
+      inputEmailElement.nextElementSibling.innerHTML = '';
+      return true
     }
     else {
-      inputEmailElement.nextElementSibling.innerHTML = '';
+      inputEmailElement.nextElementSibling.innerHTML = inputEmailElement.validationMessage;    
+      return false
     }
   }
-  //cree objet java script de formulaire pour envoyer au server 
+
+  /**
+   * Crée l'objet de formulaire pour envoyer à l'Api
+   * @param {Object} form 
+   * @return {Object} contactObject
+   */
   function createContactObject(form) {
     const contactObject = {
       firstName: form.firstName.value,
@@ -100,9 +113,12 @@ function updateQuantityPriceHtml(totalQuantity, totalPrice) {
     }
     return contactObject;
   }
- 
   
-  //cree objet java script des produit pour envoyer au server 
+  /**
+   *  Crée un tableau d'Id pour envoyer à l'Api
+   * @param {Array} cart 
+   * @return {Array} ArrayProductID
+   */
   function createArrayProductID(cart) {
     let ArrayProductID = [];
     for (let jsonCartCanape of cart) {

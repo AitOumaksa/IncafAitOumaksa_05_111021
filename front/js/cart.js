@@ -2,7 +2,6 @@
 // Récupération du pannier
 let cart = getCart();
 
-console.log(cart)
 // affichage du panier sur la page HTML
 for (let jsonCartCanape of cart) {
 
@@ -27,9 +26,8 @@ for (let jsonCartCanape of cart) {
     </div>
   </article>`
 }
+//Affichage de la quantité et du prix total du panier sur la page HTML
 updateQuantityPriceHtml(calculTotalQuantity(cart), calculTotalPrice(cart));
-
-
 
 // Mise à jour en cas de la modification de la quantité commandée par article
 document.querySelectorAll('.itemQuantity').forEach(element => {
@@ -39,17 +37,14 @@ document.querySelectorAll('.itemQuantity').forEach(element => {
     updateCartCanapeQuantity(cart, this.closest(".cart__item").dataset.id, this.closest(".cart__item").dataset.color, this.value);
     updateQuantityPriceHtml(calculTotalQuantity(cart), calculTotalPrice(cart));
   });
-  //console.log(updateCartCanapeQuantity)
- 
-
 });
 
-// Suppression d'un article losqu'on clic sur "supprimer"
+// Suppression d'un article lorsqu'on clic sur "supprimer"
 document.querySelectorAll('.deleteItem').forEach(element => {
   element.addEventListener('click', function (event) {
     event.stopPropagation();
     event.preventDefault();
-    deleteCartCanape(this.closest(".cart__item").dataset.id, this.closest(".cart__item").dataset.color);
+    deleteCartCanape(cart,this.closest(".cart__item").dataset.id, this.closest(".cart__item").dataset.color);
     this.closest("#cart__items").removeChild(this.closest(".cart__item"));
     updateQuantityPriceHtml(calculTotalQuantity(cart), calculTotalPrice(cart));
   });
@@ -58,82 +53,85 @@ document.querySelectorAll('.deleteItem').forEach(element => {
 
 
 //Validation de formulaire
-
 let form = document.querySelector('.cart__order__form');
-//écouter l'évenement de validation champ first name
-form.firstName.addEventListener('change', function () {
 
+//Validation de champ First name en cas de changement
+form.firstName.addEventListener('change', function () {
   validfirstName(this);
 });
 
-
-
-//écouter l'évenement de validation champ last name
+//Validation de champ last name en cas de changement
 form.lastName.addEventListener('change', function () {
-
   validlastName(this);
 });
 
-
-//écouter l'evenement de validation champ address
+//Validation de champ Adress en cas de changement
 form.address.addEventListener('change', function () {
-
   validaddress(this);
 });
 
-
-
-// écouter l'évenemn de validation champ city
+//Validation de champ city en cas de changement
 form.city.addEventListener('change', function () {
-
   validcity(this);
 });
 
 
 
-// ecouter l'évenement de validation champ email
+//Validation de champ Email en cas de changement
 form.email.addEventListener('change', function (event) {
   event.stopPropagation();
   event.preventDefault();
   validEmail(this);
 });
 
-
-document.getElementById('order').addEventListener('click', function (event) {
+document.querySelector('.cart__order__form').addEventListener('submit', function (event) {
   event.stopPropagation();
   event.preventDefault();
-  contact = createContactObject(form);
-  products = createArrayProductID(cart);
-  console.log(products)
-  // envoyer la requéte poste pour la validation de la commende et receoire le code de la confirmation
-  fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
+  if (getCart() != '') {
+    if (validfirstName(form.firstName) && validlastName(form.lastName) && validaddress(form.address) && validcity(form.city) && validEmail(form.email)) {
+      contact = createContactObject(form);
+      products = createArrayProductID(cart);
+      console.log(JSON.stringify({
+        contact: createContactObject(form), products: createArrayProductID(cart)
+      }));
+      // Envoyer la requéte HTTP poste pour la validation de la commende et recevoire le l'Id de la commande
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contact: createContactObject(form), products: createArrayProductID(cart)
+        })
+      })
+        //Récuperer la promess dans la variable res et retourne le body de res (text Json) converti en objet JS 
+        .then(function (res) {
+          if (res.ok) {
+            //console.log(res);
+            return res.json();
+          }
+        })
+          //Récuperer l'objets JS et suprimer le panier dans le localStorage et faire une redirection vers la page cofirmation pour afficher L'id de la commande
+        .then(function (jsonres) {
+          //console.log(jsonres);
+         localStorage.removeItem('cart');
+          document.location.href = `./confirmation.html?orderId=${jsonres.orderId}`;
+        })
+        // Si il n'arrive pas à récuperer les promesses il va afficher le message d'erreur
+        .catch(function (err) {
+          alert("Impossible de passer la commande");
+          console.log(err);
+        })
+    }
+    else { alert('Veuillez vérifiez les infos du formulaire'); }
+  }
+  else {
+    alert('Veuillez ajouter au moin un produit dans votre panier pour passer la commande');
+  }
 
-    body: JSON.stringify({contact: createContactObject(form),products: createArrayProductID(cart)
-    })
+  
+})
 
-  })
 
-    .then(function (res) {
-      if (res.ok) {
-        //console.log(res);
-        return res.json();
-      }
-    })
-    .then(function (jsonres) {
-     //console.log(jsonres);
-      // supression d'article de localStorge apres la cofirmation de la commande 
-      localStorage.removeItem('cart');
-      //recevoir le code confirmation localiser ou va s'afficher le code cofirm
-      document.location.href=`./confirmation.html?orderId=${jsonres.orderId}`; 
-    })
-    .catch(function (err) {
-      alert("Impossible de passer la commande");
-      console.log(err);
-    });
-});
 

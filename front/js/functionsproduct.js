@@ -1,5 +1,8 @@
 
-//crée l'objet javascript à rajouter dans le panier
+/**
+ * crée un objet javascript à rajouter dans le panier
+ * @return {object}  canapeToAddToCartInf
+ */
 function canapeToAddToCart() {
     const canapeToAddToCartInfo = {
         id : getUrlParamValue('id'),

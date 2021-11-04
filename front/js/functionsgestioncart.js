@@ -1,4 +1,8 @@
-//Ajout de l'objet dans le pannier
+
+/**
+ * Ajout des produits dans le panier
+ * @param {object} canapeToAddToCartInfo 
+ */
 function AddToCart(canapeToAddToCartInfo) {
     let cart = getCart();
     let findCanape = checkCartIdColor(cart,canapeToAddToCartInfo.id,canapeToAddToCartInfo.color);
@@ -20,9 +24,12 @@ function AddToCart(canapeToAddToCartInfo) {
     }
   
 }
- //console.log(saveCart)
 
-//récupère le contenu du panier nommé 'cart' qui est en format JSON et retourne son équivalent en objet javascript
+/**
+ * récupère dans localStorage la valeur de la clé  nommé 'cart' (panier), et retourne son équivalent en tableau objet javascript
+ * @return { Array | Object} 
+ */
+
 function getCart() {
     let cart = localStorage.getItem("cart");
     if (cart == null) {
@@ -33,13 +40,20 @@ function getCart() {
     }
 }
 
-//Converti un objet javascript en format JSON et l'ajoute au pannier nommé 'cart'
+/**
+ * Converti un tableau d'objets javascript en format JSON et l'ajoute au localStorage comme valeur de la clé nommée 'cart'
+ * @param {Object} cart Tableau d'objets JS représentant le panier 
+ */
+
 function saveCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-
-//Vérifie si le canapé canapeToAddToCartInfo se trouve dans le tableau de canapé cart. Si roui retourne son indice dans  cart sinon retourne null
+/**
+ * Recherche un produit dans un tableau d'objets JS représentant le panier et retourne son Index
+ * @param {Object} cart Tableau d'objets JS représentant le panier 
+ * @return {Integer | null} find 
+ */
 function checkCartIdColor(cart,canapeId,canapeColor) {
     let find = null;
     for (let jsonCartCanape of cart) {
@@ -51,7 +65,11 @@ function checkCartIdColor(cart,canapeId,canapeColor) {
     return find;
 }
 
-// Calculer le total de la quantité 
+/**
+ *  Calcule la quantité total des produits dans tableau d'objets JS représentant le panier 
+ * @param {Object} cart Tableau d'objets JS représentant le panier 
+ * @return {Integer} totalQuantity
+ */
 function calculTotalQuantity(cart)
 { 
     let totalQuantity =0;
@@ -61,7 +79,13 @@ function calculTotalQuantity(cart)
 
     return totalQuantity;
 }
-// Calculer le total de prix
+
+/**
+ * Calcule le prix total des produits dans tableau d'objets JS représentant le panier 
+ * @param {Object} cart Tableau d'objets JS représentant le panier 
+ * @return {Float} totalPrice 
+ */
+
 function calculTotalPrice(cart)
 { 
     let totalPrice=0;
@@ -70,16 +94,31 @@ function calculTotalPrice(cart)
     }
     return totalPrice;
 }
-// MAJ de la Quantité
+
+/**
+ *  MAJ de la Quantité d'un produit dans le panier
+ * @param {Object} cart Tableau d'objets JS représentant le panier 
+ * @param {String} canapeId 
+ * @param {String} canapeColor 
+ * @param {Integer} quantity quantité à ajouter 
+ */
+
 function updateCartCanapeQuantity(cart,canapeId,canapeColor,quantity)
 {
     let findCanape = checkCartIdColor(cart,canapeId,canapeColor);
     cart[findCanape].quantity = parseInt(quantity); 
     saveCart(cart); 
 }
-// supression d'article de panier
-function deleteCartCanape(canapeId,canapeColor)
-{
+
+/**
+ * supression d'un produit dans un tableau d'objets JS représentant la panier à partir de sont Id et sont couleur
+ * @param {Object} cart Tableau d'objets JS représentant le panier
+ * @param {String} canapeId
+ * @param {String} canapeColor
+ */
+
+function deleteCartCanape(cart,canapeId,canapeColor)
+{   
     let findCanape = checkCartIdColor(cart,canapeId,canapeColor);
     cart.splice(findCanape,1)
     saveCart(cart); 
